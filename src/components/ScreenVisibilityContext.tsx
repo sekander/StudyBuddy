@@ -18,7 +18,8 @@ export const ScreenVisibilityProvider = ({ children }: { children: ReactNode }) 
   const [screenVisibility, setScreenVisibility] = useState<ScreenVisibilityState>({
     splash: true,  // SplashPage is visible by default
     login: false,  // LoginPage is not visible by default
-    registration: false,
+    signup: false,
+    dashboard: false,
     // Add other screens as needed...
   });
 

@@ -2,6 +2,10 @@
 // import React from "react";
 import styled from "styled-components";
 import React, { useState } from 'react';
+import axios from 'axios'; // Import axios for making API requests
+import { AxiosError } from 'axios';  // Import AxiosError type
+
+import { useScreenVisibility } from '../ScreenVisibilityContext';
     
 const SignUpPageLayout = styled.div`
     display: flex;
@@ -14,7 +18,6 @@ const SignUpPageLayout = styled.div`
     background: white;
     overflow: hidden;
 `;
-
 // Ellipses with better positioning and some transformations
 const StyledEllipse2 = styled.div`
   width: 354.73px;
@@ -28,7 +31,6 @@ const StyledEllipse2 = styled.div`
   border-radius: 50%;
   z-index: 1;
 `;
-
 const StyledEllipse3 = styled.div`
   width: 354.73px;
   height: 354.40px;
@@ -41,7 +43,6 @@ const StyledEllipse3 = styled.div`
   border-radius: 50%;
   z-index: 2;
 `;
-
 const StyledEllipse1 = styled.div`
   width: 354.73px;
   height: 354.40px;
@@ -54,27 +55,21 @@ const StyledEllipse1 = styled.div`
   border-radius: 50%;
   z-index: 3;
 `;
-
-
 const AppLogoLayout = styled.div`
 
   z-index: 4;
 `;
-
 const LoginLogoLayout = styled.div`
     
 `;
-
 const UserNameLayout = styled.div`
     
 `;
-
 const InputLayout = styled.div`
     display: flex;
     flex-direction: column;
     
 `;
-
 const StyledInfo = styled.span`
   color: #B9B9B9;
   font-size: 14px;
@@ -82,16 +77,12 @@ const StyledInfo = styled.span`
   font-weight: 400;
   word-wrap: break-word;
 `;
-
 const StyledLine1 = styled.div`
   width: 315px;
   height: 0px;
   outline: 1px #EAEAEA solid;
   outline-offset: -0.50px;
 `;
-
-
-
 const StyledForgotPassword = styled.span`
   color: black;
   font-size: 16px;
@@ -99,7 +90,6 @@ const StyledForgotPassword = styled.span`
   font-weight: 400;
   word-wrap: break-word;
 `;
-
 const StyledDefault = styled.div`
   width: 40px;
   height: 20px;
@@ -110,18 +100,15 @@ const StyledDefault = styled.div`
   border-radius: 36.50px;
   border: 0.50px #E5E5E5 solid;
 `;
-
 const RememberMeLayout = styled.div`
     display: flex;
     flex-direction: row;
 `;
-
 const StyledBGSwitcher = styled.div`
   width: 40px;
   height: 20px;
   position: relative;
 `;
-
 const StyledDescription = styled.span`
   color: #1A1A1A;
   font-size: 12px;
@@ -131,12 +118,6 @@ const StyledDescription = styled.span`
   letter-spacing: 0.30px;
   word-wrap: break-word;
 `;
-
-
-
-
-
-
 const StyledNext01 = styled.span`
   color: white;
   font-size: 20px;
@@ -144,7 +125,6 @@ const StyledNext01 = styled.span`
   font-weight: 400;
   word-wrap: break-word;
 `;
-
 const StyledVectorG = styled.div`
   width: 19px;
   height: 15px;
@@ -153,7 +133,6 @@ const StyledVectorG = styled.div`
   position: absolute;
   background: black;
 `;
-
 const StyledVectorG01 = styled.div`
   width: 18.13px;
   height: 14.24px;
@@ -162,14 +141,12 @@ const StyledVectorG01 = styled.div`
   position: absolute;
   background: white;
 `;
-
 const StyledRightArrow1 = styled.div`
   width: 19px;
   height: 15px;
   position: relative;
   overflow: hidden;
 `;
-
 const StyledNext = styled.div`
   padding-left: 20px;
   padding-right: 20px;
@@ -182,12 +159,6 @@ const StyledNext = styled.div`
   gap: 195px;
   display: inline-flex;
 `;
-
-
-
-
-
-
 const StyledVector = styled.div`
   width: 9.67px;
   height: 9.39px;
@@ -196,7 +167,6 @@ const StyledVector = styled.div`
   position: absolute;
   background: #4285F4;
 `;
-
 const StyledVector01 = styled.div`
   width: 15.67px;
   height: 8.09px;
@@ -205,7 +175,6 @@ const StyledVector01 = styled.div`
   position: absolute;
   background: #34A853;
 `;
-
 const StyledVector02 = styled.div`
   width: 4.42px;
   height: 8.98px;
@@ -214,7 +183,6 @@ const StyledVector02 = styled.div`
   position: absolute;
   background: #FBBC04;
 `;
-
 const StyledVector03 = styled.div`
   width: 15.73px;
   height: 8.09px;
@@ -223,7 +191,6 @@ const StyledVector03 = styled.div`
   position: absolute;
   background: #EA4335;
 `;
-
 const StyledDis = styled.span`
   color: white;
   font-size: 12px;
@@ -233,20 +200,17 @@ const StyledDis = styled.span`
   letter-spacing: 0.30px;
   word-wrap: break-word;
 `;
-
 const StyledOtherPayMethod = styled.div`
   width: 20px;
   height: 20px;
   position: relative;
 `;
-
 const StyledFrame61 = styled.div`
   justify-content: flex-end;
   align-items: center;
   gap: 8px;
   display: inline-flex;
 `;
-
 const StyledGoogleBigButton40px = styled.button`
   align-self: stretch;
   height: 48px;
@@ -261,16 +225,12 @@ const StyledGoogleBigButton40px = styled.button`
   align-items: center;
   display: inline-flex;
 `;
-
-
-
 const HaveAccount = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 `;
-
 const StyledDescriptionspan = styled.span`
   color: #1A1A1A;
   font-size: 12px;
@@ -280,7 +240,6 @@ const StyledDescriptionspan = styled.span`
   letter-spacing: 0.30px;
   word-wrap: break-word;
 `;
-
 const StyledDescriptionlink = styled.a`
   color: #007AFF;
   font-size: 12px;
@@ -294,14 +253,62 @@ const StyledDescriptionlink = styled.a`
 
 
 // export const LoginPage = () => {
-export default function LoginPage() {
+export default function SignUpPage() {
+  const { screenVisibility, handleScreen } = useScreenVisibility();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
 // State to hold the input value
-    const [inputValue, setInputValue] = useState('');
+    // const [inputValue, setInputValue] = useState('');
 
     // Handler for when the input changes
-    const handleInputChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    setInputValue(event.target.value); // Update the state with the input value
+    // const handleInputChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    // setInputValue(event.target.value); // Update the state with the input value
+    // };
+
+      // Handle email input change
+  const handleEmailChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setEmail(event.target.value);
+  };
+
+  // Handle password input change
+  const handlePasswordChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setPassword(event.target.value);
+  };
+    // Handle sign-up form submission
+  // const handleSignUpSubmit = async (e) => {
+  const handleSignUpSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault(); // Prevent default form submission behavior
+
+    // Create the data object to send to the backend
+    const userData = {
+      username: email, // Using email as the username for simplicity
+      password: password
     };
+
+    try {
+      // const response = await axios.post('http://localhost:5000/signup', userData); // POST request to backend
+      // const response = await axios.post('http://192.168.2.87:5010/signup', userData); // POST request to backend
+      const response = await axios.post('https://nahid-sekander.duckdns.org/study-buddy/signup', userData); // POST request to backend
+      alert(response.data.message); // Show success message
+      handleScreen('login'); // Navigate to the login page after successful signup
+    } catch (err: unknown) {
+        // Assert the error as AxiosError type
+        if (err instanceof AxiosError) {
+          // Check if it's a 400 error and handle it
+          if (err.response?.status === 400) {
+            alert('Signup failed: ' + (err.response?.data?.message || 'Bad request. Please check your inputs.'));
+          } else {
+            alert('Signup failed: ' + err.message || 'An unexpected error occurred.');
+          }
+        } else {
+          // In case it's not an AxiosError, handle it as a generic error
+          alert('Signup failed: ' + (err instanceof Error ? err.message : 'An unexpected error occurred.'));
+        }
+      }
+    };
+
+
 
 
   return (
@@ -311,13 +318,22 @@ export default function LoginPage() {
       <StyledEllipse1 />
         <AppLogoLayout> <h1>Study </h1> <h1> Buddy</h1> </AppLogoLayout>
         <LoginLogoLayout> <h2>Sign up</h2></LoginLogoLayout>
+        <h2>Current Visible Screen: {Object.keys(screenVisibility).find(screen => screenVisibility[screen])}</h2>
+            <form onSubmit={handleSignUpSubmit}>
+
+      
         <InputLayout>
             <StyledInfo>Email Address</StyledInfo>
             <input
               type="text"
-              id="myInput"
-              value={inputValue}
-              onChange={handleInputChange} // Update state when input changes
+              // id="myInput"
+              // value={inputValue}
+              // onChange={handleInputChange} // Update state when input changes
+              value={email}
+              onChange={handleEmailChange} // Handle email input change
+              placeholder="Enter your email"
+              required
+
             />
             <StyledLine1></StyledLine1>
         </InputLayout>
@@ -325,10 +341,15 @@ export default function LoginPage() {
         <InputLayout>
             <StyledInfo>Password</StyledInfo>
             <input
-              type="text"
-              id="myInput"
-              value={inputValue}
-              onChange={handleInputChange} // Update state when input changes
+              // type="text"
+              // id="myInput"
+              // value={inputValue}
+              // onChange={handleInputChange} // Update state when input changes
+              type="password"
+              value={password}
+              onChange={handlePasswordChange} // Handle password input change
+              placeholder="Enter your password"
+              required
             />
             <StyledLine1></StyledLine1>
         </InputLayout>
@@ -345,7 +366,10 @@ export default function LoginPage() {
 
 
         <StyledNext>
-            <StyledNext01>Log in</StyledNext01>
+            {/* <StyledNext01><button onClick={() => handleScreen('login')}>   Log in  </button></StyledNext01> */}
+            <StyledNext01>
+                <button type="submit">Sign up</button>
+            </StyledNext01>
             <StyledRightArrow1>
                 <StyledVector />
                 <StyledVector01 />
@@ -370,6 +394,8 @@ export default function LoginPage() {
             <StyledDescriptionlink>Sign up now</StyledDescriptionlink>
 
         </HaveAccount>
+        </form>
+
 
 
     </SignUpPageLayout>
