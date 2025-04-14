@@ -1,17 +1,20 @@
-
 // import React from "react";
 import styled from "styled-components";
 import React, { useState } from 'react';
-import axios from 'axios'; // Import axios for making API requests
+import axios from 'axios'; // Import axios for API requests
+import Cookies from 'js-cookie';  // Import js-cookie
+
 import { AxiosError } from 'axios';  // Import AxiosError type
 
-import { useScreenVisibility } from '../ScreenVisibilityContext';
+
+import { useScreenVisibility } from '../../Data/Context/ScreenVisibilityContext';
+
     
-const SignUpPageLayout = styled.div`
+const LoginPageLayout = styled.div`
     display: flex;
     flex-direction: column;
-    width: 390px;
-    height: 844px;
+  width: 390px;
+  height: 844px;
     padding: 5%;
     text-align: left;
     position: relative;
@@ -251,89 +254,111 @@ const StyledDescriptionlink = styled.a`
 `;
 
 
+const ScreenStyle = styled.div`
+
+  color: blue;
+
+`;
+
 
 // export const LoginPage = () => {
-export default function SignUpPage() {
+export default function LoginPage() {
+// State to hold the input value
   const { screenVisibility, handleScreen } = useScreenVisibility();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-// State to hold the input value
-    // const [inputValue, setInputValue] = useState('');
-
-    // Handler for when the input changes
-    // const handleInputChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-    // setInputValue(event.target.value); // Update the state with the input value
-    // };
-
-      // Handle email input change
-  const handleEmailChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+   // Handler for email input change
+   const handleEmailChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setEmail(event.target.value);
   };
 
-  // Handle password input change
+  // Handler for password input change
   const handlePasswordChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setPassword(event.target.value);
   };
-    // Handle sign-up form submission
-  // const handleSignUpSubmit = async (e) => {
-  const handleSignUpSubmit = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault(); // Prevent default form submission behavior
 
-    // Create the data object to send to the backend
-    const userData = {
-      username: email, // Using email as the username for simplicity
-      password: password
-    };
+  // Handle login form submission
+  const handleLoginSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault(); // Prevent form submission default behavior
+    console.log("Login");
 
     try {
-      // const response = await axios.post('http://localhost:5000/signup', userData); // POST request to backend
-      // const response = await axios.post('http://192.168.2.87:5010/signup', userData); // POST request to backend
-      const response = await axios.post('https://nahid-sekander.duckdns.org/study-buddy/signup', userData); // POST request to backend
-      alert(response.data.message); // Show success message
-      handleScreen('login'); // Navigate to the login page after successful signup
+      // const response = await axios.post('http://localhost:5000/login', {
+      // const response = await axios.post('http://192.168.2.87:5010/login', {
+      const response = await axios.post('https://nahid-sekander.duckdns.org/study-buddy/login', {
+        username: email, // Send email as username
+        password: password
+      }, {withCredentials: true});
+      // Handle successful login (e.g., storing token, redirecting, etc.)
+      // alert(response.data.message + "\n" + response.data.token);
+
+      // Handle successful login
+      const token = response.data.token;
+      Cookies.set('jwt', token, { expires: 1 });  // Store JWT token in a cookie (expires in 1 day)
+      Cookies.set('username', email, { expires: 1 });  // Store username in a cookie
+
+
+      alert(response.data.message + "\n" + token);
+
+
+      // Navigate to the dashboard or show appropriate response
+      handleScreen('dashboard'); // Navigate to the dashboard screen
     } catch (err: unknown) {
         // Assert the error as AxiosError type
         if (err instanceof AxiosError) {
           // Check if it's a 400 error and handle it
           if (err.response?.status === 400) {
-            alert('Signup failed: ' + (err.response?.data?.message || 'Bad request. Please check your inputs.'));
+            alert('Login failed: ' + (err.response?.data?.message || 'Bad request. Please check your inputs.'));
           } else {
-            alert('Signup failed: ' + err.message || 'An unexpected error occurred.');
+            alert('Login failed: ' + err.message || 'An unexpected error occurred.');
           }
         } else {
           // In case it's not an AxiosError, handle it as a generic error
-          alert('Signup failed: ' + (err instanceof Error ? err.message : 'An unexpected error occurred.'));
+          alert('Login failed: ' + (err instanceof Error ? err.message : 'An unexpected error occurred.'));
         }
-      }
+    }
+     
+    };
+
+    const [inputValue, setInputValue] = useState('');
+
+    // Handler for when the input changes
+    const handleInputChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setInputValue(event.target.value); // Update the state with the input value
     };
 
 
-
-
   return (
-    <SignUpPageLayout>
+    <LoginPageLayout>
       <StyledEllipse2 />
       <StyledEllipse3 />
       <StyledEllipse1 />
         <AppLogoLayout> <h1>Study </h1> <h1> Buddy</h1> </AppLogoLayout>
-        <LoginLogoLayout> <h2>Sign up</h2></LoginLogoLayout>
-        <h2>Current Visible Screen: {Object.keys(screenVisibility).find(screen => screenVisibility[screen])}</h2>
-            <form onSubmit={handleSignUpSubmit}>
+        <LoginLogoLayout> <h2>Login </h2></LoginLogoLayout>
 
-      
+
+
+<ScreenStyle>
+
+        <h2>Current Visible Screen: {Object.keys(screenVisibility).find(screen => screenVisibility[screen])}</h2>
+</ScreenStyle>
+
+
+
+
+
         <InputLayout>
             <StyledInfo>Email Address</StyledInfo>
             <input
               type="text"
-              // id="myInput"
+              id="myInput"
               // value={inputValue}
-              // onChange={handleInputChange} // Update state when input changes
               value={email}
-              onChange={handleEmailChange} // Handle email input change
-              placeholder="Enter your email"
-              required
 
+              onChange={handleEmailChange}
+
+              // onChange={handleInputChange} // Update state when input changes
             />
             <StyledLine1></StyledLine1>
         </InputLayout>
@@ -341,15 +366,14 @@ export default function SignUpPage() {
         <InputLayout>
             <StyledInfo>Password</StyledInfo>
             <input
-              // type="text"
-              // id="myInput"
+              type="text"
+              id="myInput"
               // value={inputValue}
-              // onChange={handleInputChange} // Update state when input changes
-              type="password"
               value={password}
-              onChange={handlePasswordChange} // Handle password input change
-              placeholder="Enter your password"
-              required
+
+              // onChange={handleInputChange} // Update state when input changes
+              onChange={handlePasswordChange}
+
             />
             <StyledLine1></StyledLine1>
         </InputLayout>
@@ -366,10 +390,8 @@ export default function SignUpPage() {
 
 
         <StyledNext>
-            {/* <StyledNext01><button onClick={() => handleScreen('login')}>   Log in  </button></StyledNext01> */}
-            <StyledNext01>
-                <button type="submit">Sign up</button>
-            </StyledNext01>
+            {/* <StyledNext01><button onClick={() => handleScreen('dashboard')}>   Log in  </button></StyledNext01> */}
+            <StyledNext01><button onClick={handleLoginSubmit}>   Log in  </button></StyledNext01>
             <StyledRightArrow1>
                 <StyledVector />
                 <StyledVector01 />
@@ -391,13 +413,12 @@ export default function SignUpPage() {
 
         <HaveAccount>
             <StyledDescriptionspan>Don't have an account? </StyledDescriptionspan>
-            <StyledDescriptionlink>Sign up now</StyledDescriptionlink>
+            {/* <StyledDescriptionlink> <button onClick={console.log("Sign Up")}> Sign up now</button>  </StyledDescriptionlink> */}
+            <StyledDescriptionlink><button onClick={() => handleScreen('signup')}>   Sign up now  </button></StyledDescriptionlink>
 
         </HaveAccount>
-        </form>
 
 
-
-    </SignUpPageLayout>
+    </LoginPageLayout>
   );
 };

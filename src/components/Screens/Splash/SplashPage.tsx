@@ -1,7 +1,7 @@
 
 import React, {useEffect} from 'react'
 import styled from "styled-components";
-import { useScreenVisibility } from '../ScreenVisibilityContext';
+import { useScreenVisibility } from '../../Data/Context/ScreenVisibilityContext';
 import Cookies from 'js-cookie';  // Import js-cookie to check cookies
 
 

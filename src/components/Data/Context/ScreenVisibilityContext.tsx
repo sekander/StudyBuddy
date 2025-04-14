@@ -16,10 +16,14 @@ const ScreenVisibilityContext = createContext<ScreenVisibilityContextType | unde
 export const ScreenVisibilityProvider = ({ children }: { children: ReactNode }) => {
   // Define the screen visibility state with dynamic keys
   const [screenVisibility, setScreenVisibility] = useState<ScreenVisibilityState>({
-    splash: true,  // SplashPage is visible by default
+    splash: false,  // SplashPage is visible by default
     login: false,  // LoginPage is not visible by default
     signup: false,
-    dashboard: false,
+    dashboard: true,
+    // dashboard: false, 
+    categoryManager: false,
+    taskManager: false,
+    // allcategories: false,
     // Add other screens as needed...
   });
 

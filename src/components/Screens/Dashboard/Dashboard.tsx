@@ -1,8 +1,71 @@
 import React, {useEffect, useState} from 'react'
-import { useScreenVisibility } from '../ScreenVisibilityContext';
-
+import styled from 'styled-components';
+import { useScreenVisibility } from '../../Data/Context/ScreenVisibilityContext';
 import Cookies from 'js-cookie'; // Import js-cookie
 import axios from 'axios';
+
+
+
+
+const StyledNext01span = styled.span`
+  color: white;
+  font-size: 20px;
+  font-family: Poppins;
+  font-weight: 400;
+  word-wrap: break-word;
+`;
+
+const StyledVector = styled.div`
+  width: 19px;
+  height: 15px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: white;
+`;
+
+const StyledVector01 = styled.div`
+  width: 18.13px;
+  height: 14.24px;
+  left: 0.49px;
+  top: 0.59px;
+  position: absolute;
+  background: white;
+`;
+
+const StyledRightArrow1 = styled.div`
+  width: 19px;
+  height: 15px;
+  position: relative;
+  overflow: hidden;
+`;
+
+const StyledNext = styled.div`
+  width: 319px;
+  height: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: black;
+  border-radius: 8px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 120px;
+  display: inline-flex;
+`;
+
+const BottomNav = styled.div`
+  display: flex;
+  flex-direction: row;
+
+`;
+
+
+
+
+
+
 
 export default function Dashboard() {
   const { screenVisibility, handleScreen } = useScreenVisibility();
@@ -52,8 +115,6 @@ export default function Dashboard() {
       setLoading(false);
     }
   };
-
-
   // Function to handle logout
   const handleLogout = async () => {
       // Delete the cookies on the client-side
@@ -63,13 +124,15 @@ export default function Dashboard() {
       // Navigate to the login screen
       handleScreen('login');
   };
-
-
-
   useEffect(() => {
     fetchUserInfo();  // Fetch user info on component mount
   }, []);
 
+  const handleTaskClick = () => {
+
+    ///Cookies.set('selectedCategory', JSON.stringify( null));  // Store username in a cookie
+    handleScreen('taskManager');
+  };
 
   return (
     <div>Dashboard
@@ -98,6 +161,25 @@ export default function Dashboard() {
 
       {/* Logout button */}
       <button onClick={handleLogout}>Logout</button>
+
+      <StyledNext>
+      <StyledNext01span><button onClick={() => handleScreen('categoryManager')}> Add Category</button></StyledNext01span>
+      <StyledRightArrow1>
+        <StyledVector />
+        <StyledVector01 />
+      </StyledRightArrow1>
+    </StyledNext>
+      {/* <StyledNext01span><button onClick={() => handleScreen('taskManager')}> Add Tasks</button></StyledNext01span> */}
+      <StyledNext01span><button onClick={() => handleTaskClick()}> Add Tasks</button></StyledNext01span>
+
+      <BottomNav>
+          <button > Categories</button>
+          <button > Calendar</button>
+          <button > Profile</button>
+
+      </BottomNav>
+
+
     </div>
   )
 }

@@ -1,0 +1,44 @@
+import Cookies from 'js-cookie';
+import React from 'react';
+
+export default function TaskManager() {
+  const selectedCategory = Cookies.get('selectedCategory');
+  
+  // Check if selectedCategory exists and is a valid string before parsing
+  let category = null;
+  if (selectedCategory) {
+    try {
+      category = JSON.parse(selectedCategory);  // Try to parse it as JSON
+    } catch (error) {
+      console.error('Error parsing the selectedCategory cookie:', error);
+      category = null;  // If parsing fails, set category to null
+    }
+  }
+
+  return (
+    <div>
+      <h1>Task Manager</h1>
+      
+      {/* Display cookie value directly */}
+      <p>Cookie: {selectedCategory}</p>
+
+      {/* Check if category is not null before trying to loop */}
+      {category ? (
+        <div>
+          <h3>Category Details:</h3>
+          <ul>
+            {Object.entries(category).map(([key, value]) => (
+              <li key={key}>
+                <strong>{key}:</strong> {String(value)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p>No category selected in cookies.</p>
+      )}
+      
+      <p>Cookie: {Cookies.get('selectedCategory')}</p> {/* Display JWT from cookie */}
+    </div>
+  );
+}

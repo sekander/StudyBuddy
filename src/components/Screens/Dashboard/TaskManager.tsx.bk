@@ -1,0 +1,152 @@
+import Cookies from 'js-cookie';
+import React, { useEffect, useRef, useState } from 'react';
+import { useScreenVisibility } from '../../Data/Context/ScreenVisibilityContext';
+import styled from 'styled-components';
+
+
+const TaskManagerView = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+
+// export default function TaskManager() {
+const TaskManager : React.FC = () => {
+  const { screenVisibility, handleScreen } = useScreenVisibility();
+  // const categoryCookie = Cookies.get('category');
+  const savedCategories =  Cookies.get('categories'); // Get saved categories from cookie
+  const selectedCategory = Cookies.get('selectedCategory');
+
+   // Load the tasks when the component mounts
+  useEffect(() => {
+    if (selectedCategory) {
+      try {
+        // Parse the selectedCategory cookie to get the category data
+        const category = JSON.parse(selectedCategory);
+
+        // Check if the parsed category has tasks, and set them in the state
+        if (category && Array.isArray(category.tasks)) {
+          setTasks(category.tasks);
+        }
+      } catch (error) {
+        console.error('Error parsing the selectedCategory cookie:', error);
+      }
+    }
+  }, [selectedCategory]); // Only run on initial render or when the selectedCategory changes
+
+
+  // Parse the selectedCategory if it's not null
+  let category = null;
+  if (selectedCategory) {
+    try {
+      category = JSON.parse(selectedCategory);  // Try to parse it as JSON
+    } catch (error) {
+      console.error('Error parsing the selectedCategory cookie:', error);
+      category = null;  // If parsing fails, set category to null
+    }
+  }
+
+  // Local state for tasks (independently managed)
+  const [tasks, setTasks] = useState<any[]>([]);
+
+
+  
+  // Add a new task
+  const addTask = () => {
+    const taskTitle = prompt('Enter new task:');  // Simple prompt for input
+    if (taskTitle) {
+      const newTask = { id: Date.now(), title: taskTitle };
+      const updatedTasks = [...tasks, newTask];
+      setTasks(updatedTasks);  // Update the local state for tasks
+
+        // Update the tasks in the selectedCategory cookie
+      if (selectedCategory) {
+        try {
+          const category = JSON.parse(selectedCategory);
+          const categories = savedCategories ? JSON.parse(savedCategories) : []; // Parse saved categories if available
+          category.tasks = updatedTasks;  // Update the tasks array in the category
+          categories.pop();
+          categories.push(category);
+          console.log(Cookies.get('categories'));
+          Cookies.set('categories', JSON.stringify(categories));
+          console.log(Cookies.get('categories'));
+        } catch (error) {
+          console.error('Error updating tasks in selectedCategory cookie:', error);
+        }
+      }
+    }
+  };
+
+  // Delete a task
+  const deleteTask = (taskId: number) => {
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(updatedTasks);  // Update the local state for tasks
+
+     // Update the tasks in the selectedCategory cookie
+    if (selectedCategory) {
+      try {
+        const category = JSON.parse(selectedCategory);
+        const categories = savedCategories ? JSON.parse(savedCategories) : []; // Parse saved categories if available
+        category.tasks = updatedTasks;  // Update the tasks array in the category
+        Cookies.set('selectedCategory', JSON.stringify(category));  // Save back to cookie
+          categories.pop();
+          categories.push(category);
+          console.log(Cookies.get('categories'));
+          Cookies.set('categories', JSON.stringify(categories));
+          console.log(Cookies.get('categories'));
+      } catch (error) {
+        console.error('Error updating tasks in selectedCategory cookie:', error);
+      }
+    }
+  };
+  
+
+
+  return (
+    <div>
+      <h1>Task Manager</h1>
+        <h2>Current Visible Screen: {Object.keys(screenVisibility).find(screen => screenVisibility[screen])}</h2>
+      
+      {/* Display category title if available */}
+      {category ? (
+        <h3>Category: {category.title}</h3>
+      ) : (
+        <p>No category selected in cookies.</p>
+
+
+
+
+
+
+
+
+      )}
+      
+      {/* Display task list */}
+      <div>
+        <h3>Tasks:</h3>
+        <ul>
+          {tasks.map((task) => (
+            <li key={task.id}>
+              {task.title} 
+              <button onClick={() => deleteTask(task.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+
+        {/* Add new task */}
+        <button onClick={addTask}>Add Task</button>
+      </div>
+      
+      <button onClick={() => handleScreen('dashboard')}>DashBoard</button>
+
+
+
+
+    </div>
+  );
+}
+
+
+
+export default TaskManager;
