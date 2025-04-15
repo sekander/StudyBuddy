@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import AppWithProvider from './App';
-
+// import { BrowserRouter } from 'react-router-dom';
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -12,10 +12,13 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    {/* <App /> */}
-    <AppWithProvider />
+  // <React.StrictMode>
+  //   {/* <App /> */}
+  //   <AppWithProvider />
 
+  // </React.StrictMode>
+    <React.StrictMode>
+      <AppWithProvider />
   </React.StrictMode>
 );
 

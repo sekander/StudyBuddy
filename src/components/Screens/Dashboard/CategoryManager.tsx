@@ -1,6 +1,6 @@
 import React from 'react';
 import { CategoryProvider } from '../../Data/Context/CategoryContext';
-
+import styled from 'styled-components';
 import AddCategory from '../../Data/View/AddCategory';
 import CategoryList from '../../Data/View/CategoryList';
 import Cookies from 'js-cookie';
@@ -15,18 +15,15 @@ const App: React.FC = () => {
       // Navigate to the login screen
       // handleScreen('login');
   };
+
+
   return (
     <CategoryProvider>
       <div>
-        <h1>Category Management</h1>
         <AddCategory />
         <CategoryList />
-
-
-
-
-      </div>
-      <button onClick={clearCategories}>Test</button>
+     </div>
+      {/* <button onClick={clearCategories}>Add Category</button> */}
     </CategoryProvider>
   );
 };

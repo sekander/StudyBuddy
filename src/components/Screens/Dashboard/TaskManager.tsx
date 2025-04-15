@@ -3,10 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useScreenVisibility } from '../../Data/Context/ScreenVisibilityContext';
 import styled from 'styled-components';
 
-const TaskManagerView = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 
 const TaskManager: React.FC = () => {
   const { screenVisibility, handleScreen } = useScreenVisibility();
@@ -158,119 +154,231 @@ const TaskManager: React.FC = () => {
     }
   };
 
-  return (
-    <TaskManagerView>
-      <h1>Task Manager</h1>
-      <h2>Current Visible Screen: {Object.keys(screenVisibility).find((screen) => screenVisibility[screen])}</h2>
 
-      {/* Task Form */}
-      <form onSubmit={addTask}>
-        {/* Title Input */}
-        <label>Title:</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <br />
+const Wrapper = styled.div`
+  min-width: 390px;
+  height: 100vh;
+  margin: auto;
+  font-family: 'Helvetica Neue', sans-serif;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: #ffffff;
+`;
 
-        {/* Category Dropdown */}
-        <label>Category:</label>
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          required
-        >
+
+const ScrollContainer = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px 100px;
+  box-sizing: border-box;
+`;
+
+const TopBar = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;  // Centers title
+  padding: 16px;
+  margin-top: 20px; 
+  margin-bottom: 12px;
+
+  button {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+`;
+
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const Label = styled.label`
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 4px;
+  display: block;
+  text-align: left;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+`;
+
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: none;
+  height: 100px;
+  box-sizing: border-box;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+`;
+
+const Button = styled.button`
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 16px;
+  align-self: flex-end;
+  cursor: pointer;
+
+  &:hover {
+    background: #4338ca;
+  }
+`;
+
+
+const Section = styled.div`
+  display: flex;
+  gap:90px;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const PriorityGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background: #f3f4f6;
+  border-radius: 8px;
+  overflow: hidden;
+`;
+
+const PriorityButton = styled.button<{ selected: boolean }>`
+  flex: 1;
+  background: ${({ selected }) => (selected ? '#e0e7ff' : 'transparent')};
+  border: none;
+  font-size: 14px;
+  padding: 12px 0;
+  cursor: pointer;
+  border-right: 1px solid #ccc;
+
+  &:last-child {
+    border-right: none;
+  }
+`;
+
+
+
+const Reminder = styled.div`
+display: flex;
+gap: 90px;
+`;
+
+
+return (
+  <Wrapper>
+    <ScrollContainer>
+    <TopBar>
+      <button onClick={() => handleScreen('dashboard')}>Cancel</button>
+      <h2>New Task</h2>
+    </TopBar>
+
+
+    <Form onSubmit={addTask}>
+      <Input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Title"
+        required
+      />
+
+      <Section>
+        <Label>Category</Label>
+        <Select value={category} onChange={(e) => setCategory(e.target.value)} required>
           {categories.map((cat, index) => (
             <option key={index} value={cat.title}>
               {cat.title}
             </option>
           ))}
-        </select>
-        <br />
+        </Select>
+      </Section>
 
-        {/* Date Input */}
-        <label>Date:</label>
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
-        <br />
+      <Section>
+      <Label>Date</Label>
+      <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+      </Section>
+     
+      <Section>
+      <Label>Start Time</Label>
+      <Input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
+      </Section>
+     
+     
+      <Section>
+      <Label>End Time</Label>
+      <Input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
+      </Section>
+      
+      <Reminder>
+      <Label>Repeat Reminder</Label>
+      <input type="checkbox" checked={repeatReminder} onChange={(e) => setRepeatReminder(e.target.checked)} />
+      </Reminder>
 
-        {/* Start Time Input */}
-        <label>Start Time:</label>
-        <input
-          type="time"
-          value={startTime}
-          onChange={(e) => setStartTime(e.target.value)}
-          required
-        />
-        <br />
 
-        {/* End Time Input */}
-        <label>End Time:</label>
-        <input
-          type="time"
-          value={endTime}
-          onChange={(e) => setEndTime(e.target.value)}
-          required
-        />
-        <br />
+      <Label>Description</Label>
+      <TextArea value={description} onChange={(e) => setDescription(e.target.value)} required />
 
-        {/* Repeat Reminder Checkbox */}
-        <label>Repeat Reminder:</label>
-        <input
-          type="checkbox"
-          checked={repeatReminder}
-          onChange={(e) => setRepeatReminder(e.target.checked)}
-        />
-        <br />
 
-        {/* Description Input */}
-        <label>Description:</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={4}
-          required
-        ></textarea>
-        <br />
+      <Label>Priority</Label>
+      <PriorityGroup>
+        {['High', 'Medium', 'Low'].map((level) => (
+          <PriorityButton
+            key={level}
+            selected={priority === level.toLowerCase()}
+            onClick={() => setPriority(level.toLowerCase())}
+            type="button"
+          >
+            {level}
+          </PriorityButton>
+        ))}
+      </PriorityGroup>
 
-        {/* Priority Dropdown */}
-        <label>Priority:</label>
-        <select
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-        >
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
-        <br />
-
-        {/* Submit Button */}
-        <button type="submit">Add Task</button>
-      </form>
-
-      {/* Display task list */}
-      <div>
-        <h3>Tasks:</h3>
-        <ul>
-          {tasks.map((task) => (
-            <li key={task.id}>
-              {task.title} - {task.date} - {task.startTime} to {task.endTime} - {task.priority}
-              <button onClick={() => deleteTask(task.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <button onClick={() => handleScreen('dashboard')}>DashBoard</button>
-    </TaskManagerView>
-  );
+      <Button type="submit">Done</Button>
+    </Form>
+    </ScrollContainer>
+  </Wrapper>
+);
 };
 
 export default TaskManager;
