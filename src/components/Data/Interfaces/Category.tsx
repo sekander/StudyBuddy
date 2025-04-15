@@ -8,7 +8,7 @@ export interface Category {
     id: number;
     title: string;
     color: string;
-    icon: string;
+    // icon: string;
     tasks: Task[];
   }
   

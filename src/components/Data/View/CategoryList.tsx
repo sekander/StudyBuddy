@@ -65,7 +65,7 @@ const CategoryList: React.FC = () => {
         {categories.map((category, index) => (
 
         <button onClick={() => handleCategoryClick(category)}>
-            {category.icon} {category.title} {index}
+            {category.title} {index}
         </button>
         ))}
       </ul>

@@ -328,6 +328,42 @@ export default function LoginPage() {
     setInputValue(event.target.value); // Update the state with the input value
     };
 
+    const StyledLoginButton = styled.button`
+    width: 100%;
+    padding: 12px;
+    background: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  
+    &:hover {
+      background: #4338ca;
+    }
+  `;
+
+const StyledGoogleBigButton40px = styled.button`
+  width: 100%;
+  height: 48px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 500;
+`;
+
 
   return (
     <LoginPageLayout>
@@ -389,14 +425,14 @@ export default function LoginPage() {
         <StyledForgotPassword>Forgot Password ?</StyledForgotPassword>
 
 
-        <StyledNext>
-            {/* <StyledNext01><button onClick={() => handleScreen('dashboard')}>   Log in  </button></StyledNext01> */}
-            <StyledNext01><button onClick={handleLoginSubmit}>   Log in  </button></StyledNext01>
-            <StyledRightArrow1>
-                <StyledVector />
-                <StyledVector01 />
-            </StyledRightArrow1>
-        </StyledNext>
+        <StyledLoginButton onClick={handleLoginSubmit}>
+        Log in
+        <StyledRightArrow1>
+          <StyledVector />
+          <StyledVector01 />
+        </StyledRightArrow1>
+      </StyledLoginButton>
+
 
 
         <StyledGoogleBigButton40px>
@@ -407,7 +443,7 @@ export default function LoginPage() {
                 <StyledVector02 />
                 <StyledVector03 />
                 </StyledOtherPayMethod>
-                <StyledDis>Or sign in with Google</StyledDis>
+                <span>Sign in with Google</span>
             </StyledFrame61>
         </StyledGoogleBigButton40px>
 

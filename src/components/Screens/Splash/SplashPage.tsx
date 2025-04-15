@@ -46,9 +46,9 @@ export default function LoginPage() {
 
   return (
     <div style={{display: 'flex', flexDirection: 'column'}} onClick={() => handleScreen('login')}>
-      <StyledStudyBuddy>Study<br />Buddy</StyledStudyBuddy> 
+      <StyledStudyBuddy>Task<br />Buddy</StyledStudyBuddy> 
       <StyledTrackPlanandSucceed>“Track, Plan and Succeed!”</StyledTrackPlanandSucceed>
-        <h2>Current Visible Screen: {Object.keys(screenVisibility).find(screen => screenVisibility[screen])}</h2>
+        {/* <h2>Current Visible Screen: {Object.keys(screenVisibility).find(screen => screenVisibility[screen])}</h2> */}
     </div>
   )
 }
